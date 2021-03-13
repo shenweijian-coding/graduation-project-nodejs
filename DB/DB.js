@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
-const { app } = require('./config')
+const { app } = require('../config/config')
 
 class Db{
 

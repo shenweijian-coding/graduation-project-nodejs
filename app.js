@@ -1,20 +1,32 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const https = require("https");
+const http = require('http')
+const fs = require('fs');
+const { getOpenId } = require('./module/user');
+const { ErrorModel } = require('./module/resModel');
 const app = express()
 const port = 3000
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
- 
 // parse application/json
 app.use(bodyParser.json())
+
+// https 证书配置
 const httpsOption = {
-  key : fs.readFileSync("./2_yuanxiaoshen.com.key"),
-  cert: fs.readFileSync("./1_yuanxiaoshen.com_bundle.pem")
+  // key : fs.readFileSync("./2_yuanxiaoshen.com.key"),
+  // cert: fs.readFileSync("./1_yuanxiaoshen.com_bundle.pem")
 }
-//添加两个路由到应用上
+app.use('/wx', require('./routes/wx'))
+
+// 获取openId
+app.use((req,res,next)=>{
+  getOpenId(req) ? res.send(new ErrorModel('非法访问')) : next()
+})
+
+//添加路由到应用上
 app.use('/api', require('./routes/api'));
 
-
 app.get('/', (req, res) => res.send('Hello World!'))
-https.createServer(httpsOption, app).listen(port);
+
+http.createServer(app).listen(port,()=>{console.log('success')});
