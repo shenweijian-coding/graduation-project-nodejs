@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('../tool/request')
-const { getNewsList,getAddressInfo } = require('../module/schoolInfo');
+const { getNewsList,getAddressInfo, getClubInfo } = require('../module/schoolInfo');
 const { SuccessModel, ErrorModel } = require('../module/resModel');
 const { updateUserInfo, getUserInfo } = require('../module/user');
 
@@ -28,6 +28,15 @@ router.get('/getAddressInfo',(req,res)=>{
   getAddressInfo().then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>console.log(err))
+})
+// 获取社团信息接口
+router.get('/getClubInfo', (req,res)=>{
+  getClubInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err.message);
+    res.send(new ErrorModel(err.message))
+  })
 })
 router.get('/', function (req, res) {
   res.send('用户首页');

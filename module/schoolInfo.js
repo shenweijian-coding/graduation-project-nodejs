@@ -19,4 +19,13 @@ async function getAddressInfo() {
     resolve(addressInfo[0].addressList)
   })
 }
-module.exports = { getNewsList,getAddressInfo }
+// 获取社团信息
+async function getClubInfo(req) {
+  return new Promise(async (resolve,reject)=>{
+    const { type } = req.query
+    console.log(type);
+    const res = await DB.find('club', { type: type })
+    resolve(res)
+  })
+}
+module.exports = { getNewsList,getAddressInfo,getClubInfo }
