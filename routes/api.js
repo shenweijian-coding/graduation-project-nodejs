@@ -7,6 +7,7 @@ const { getNewsList,getAddressInfo, getClubInfo } = require('../module/schoolInf
 const { getResellInfo, postTrade } = require('../module/resell')
 const { SuccessModel, ErrorModel } = require('../module/resModel');
 const { updateUserInfo, getUserInfo } = require('../module/user');
+const { issueComment, getCommentList } = require('../module/common');
 
 // 修改信息数据接口
 router.post('/addUserInfo',(req,res)=>{
@@ -63,6 +64,25 @@ router.get('/getResellInfo', (req,res)=>{
 // 发布商品接口  二手物品交易
 router.post('/postTrade',(req,res)=>{
   postTrade(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+
+// 发布评论接口
+router.post('/issueComment',(req,res)=>{
+  issueComment(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err)
+    res.send(new ErrorModel(err.message))
+  })
+})
+
+// 查询评论信息
+router.get('/getCommentList',(req,res)=>{
+  getCommentList(req).then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>{
     console.log(err);
