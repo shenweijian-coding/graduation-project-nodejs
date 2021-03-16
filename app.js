@@ -11,7 +11,8 @@ const port = 3000
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-
+// 加入静态资源
+app.use('/public', express.static('public'));
 // https 证书配置
 const httpsOption = {
   // key : fs.readFileSync("./2_yuanxiaoshen.com.key"),

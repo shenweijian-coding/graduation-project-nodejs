@@ -65,6 +65,19 @@ class Db{
     })
   }
 
+  addto(collectionName,json1,json2) {
+    return new Promise((resolve,reject)=>{
+      this.connect().then(db=>{
+        const result = db.collection(collectionName).updateOne(json1,{$addToSet:json2},(err,result)=>{
+          if(err){
+            reject(err)
+          }else{
+            resolve(result)
+          }
+        })
+      })
+    })
+  }
   insert(collectionName,json){
     return new Promise((resolve,reject)=>{
       this.connect().then(db=>{

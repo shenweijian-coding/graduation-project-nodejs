@@ -12,9 +12,9 @@ function updateUserInfo(req) {
   return new Promise(async(resolve,reject)=>{
     try {
       const openid = req.openid
-      const { name, college, grade, major, email, wxName,avator,gender } = req.body
+      const { name, college, grade, major, email, wxName,avatarUrl,gender } = req.body
       const info = {
-        userInfo: { avator, gender },
+        userInfo: { avatarUrl, gender },
         schoolInfo: { grade, major, college, name },
         contactWay: { wxName, email }
       }
