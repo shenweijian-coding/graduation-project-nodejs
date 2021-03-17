@@ -1,14 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const formidable = require('formidable');
-const request = require('../tool/request')
 const fs = require('fs')
-const { getNewsList,getAddressInfo, getClubInfo } = require('../module/schoolInfo');
-const { getResellInfo, postTrade } = require('../module/resell')
+const { getNewsList,getAddressInfo, getClubInfo, getHomeInfo } = require('../module/schoolInfo');
+const { getResellInfo, postTrade, issueLoseInfo } = require('../module/resell')
 const { SuccessModel, ErrorModel } = require('../module/resModel');
 const { updateUserInfo, getUserInfo } = require('../module/user');
 const { issueComment, getCommentList } = require('../module/common');
-
+// 获取校园新闻数据
+router.get('/getNewsList',(req,res)=>{
+  getNewsList().then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+// 获取小程序首页数据
+router.get('/getHomeInfo',(req,res)=>{
+  getHomeInfo().then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
 // 修改信息数据接口
 router.post('/addUserInfo',(req,res)=>{
   updateUserInfo(req)
@@ -83,6 +97,15 @@ router.post('/issueComment',(req,res)=>{
 // 查询评论信息
 router.get('/getCommentList',(req,res)=>{
   getCommentList(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+
+// 发布失物招领
+router.post('/issueLoseInfo',(req,res)=>{
+  issueLoseInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>{
     console.log(err);

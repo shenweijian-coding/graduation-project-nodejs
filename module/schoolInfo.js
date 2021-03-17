@@ -6,7 +6,7 @@ async function getNewsList(){
   return new Promise(async(resolve,reject)=>{
     try {
       const newList = await DB.find('schoolInfo', {"_id": ObjectId('604b48c29382b35c705b387c')})
-      resolve(newList)
+      resolve(newList[0])
     } catch (error) {
       reject(error)
     }
@@ -28,4 +28,15 @@ async function getClubInfo(req) {
     resolve(res)
   })
 }
-module.exports = { getNewsList,getAddressInfo,getClubInfo }
+// 获取首页校园信息
+async function getHomeInfo(){
+  return new Promise(async(resolve,reject)=>{
+    try {
+      const homeInfo = await DB.find('schoolInfo', {'_id':ObjectId('6050a205f1112d4d6607ceb2')})
+      resolve(homeInfo[0])
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+module.exports = { getNewsList,getAddressInfo,getClubInfo,getHomeInfo }

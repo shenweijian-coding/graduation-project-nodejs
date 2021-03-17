@@ -32,5 +32,32 @@ function postTrade(req) {
     }
   })
 }
+function getLostInfo(){
+  return new Promise((resolve,reject)=>{
+    try {
+      
+    } catch (error) {
+      
+    }
+  })
+}
 
-module.exports = { getResellInfo, postTrade }
+// 发布失物招领信息
+function issueLoseInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    const lostInfo = req.body
+    const openId = req.openid // 获取发布人openid
+    // 查询该用户信息
+    const userList = await getUserInfoByOpenId(openId)
+    if(!userList) resolve('未找到用户信息')
+    const userInfo = userList[0].info.userInfo
+    userInfo.name = userList[0].info.schoolInfo.name
+     // 插入数据并 获取插入的id
+    const { insertedId } = await DB.insert('lostandfound', {...lostInfo, userInfo})
+    // 将id绑定到userInfo集合
+    await addNewUserInfo(openId,'lostandfound', insertedId.toString())
+    console.log(lostInfo);
+    resolve({})
+  })
+}
+module.exports = { getResellInfo, postTrade, issueLoseInfo,getLostInfo }
