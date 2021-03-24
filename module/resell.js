@@ -11,6 +11,7 @@ function getResellInfo() {
     }
   })
 }
+
 // 新增物品发布信息
 function postTrade(req) {
   return new Promise(async(resolve,reject)=>{
@@ -32,12 +33,16 @@ function postTrade(req) {
     }
   })
 }
-function getLostInfo(){
-  return new Promise((resolve,reject)=>{
+
+// 查询丢失物品信息
+function getLostInfo(req){
+  return new Promise(async(resolve,reject)=>{
     try {
-      
+      const { role } = req.query
+      const lostInfo = await DB.find('lostandfound', { role })
+      resolve(lostInfo)
     } catch (error) {
-      
+      reject(error)
     }
   })
 }
@@ -56,8 +61,31 @@ function issueLoseInfo(req){
     const { insertedId } = await DB.insert('lostandfound', {...lostInfo, userInfo})
     // 将id绑定到userInfo集合
     await addNewUserInfo(openId,'lostandfound', insertedId.toString())
-    console.log(lostInfo);
-    resolve({})
+    resolve('发布成功')
   })
 }
-module.exports = { getResellInfo, postTrade, issueLoseInfo,getLostInfo }
+
+// 发布需求
+function issueNeedInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    const reqData = req.body
+    const openId = req.openid
+    // 查询该用户信息
+    const userList = await getUserInfoByOpenId(openId)
+    if(!userList) resolve('未找到用户信息')
+    const userInfo = userList[0].info.userInfo
+    userInfo.name = userList[0].info.schoolInfo.name
+    const { insertedId } = await DB.insert('help',{...reqData, userInfo})
+    // 将id绑定到userInfo集合
+    await addNewUserInfo(openId,'helpList', insertedId.toString())
+    resolve('发布成功')
+  })
+}
+// 查询需求
+function getHelpInfo(){
+  return new Promise(async(resolve,reject)=>{
+    const helpInfo = await DB.find('help',{})
+    resolve(helpInfo)
+  })
+}
+module.exports = { getResellInfo, postTrade, issueLoseInfo,getLostInfo,issueNeedInfo, getHelpInfo }

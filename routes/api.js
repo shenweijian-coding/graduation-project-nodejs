@@ -3,10 +3,11 @@ const router = express.Router();
 const formidable = require('formidable');
 const fs = require('fs')
 const { getNewsList,getAddressInfo, getClubInfo, getHomeInfo } = require('../module/schoolInfo');
-const { getResellInfo, postTrade, issueLoseInfo } = require('../module/resell')
+const { getResellInfo, postTrade, issueLoseInfo, getLostInfo, issueNeedInfo,getHelpInfo } = require('../module/resell')
 const { SuccessModel, ErrorModel } = require('../module/resModel');
 const { updateUserInfo, getUserInfo } = require('../module/user');
 const { issueComment, getCommentList } = require('../module/common');
+const { getLoveInfo, issueLoveInfo } = require('../module/love');
 // 获取校园新闻数据
 router.get('/getNewsList',(req,res)=>{
   getNewsList().then(result=>{
@@ -103,12 +104,51 @@ router.get('/getCommentList',(req,res)=>{
   })
 })
 
+// 查询失物招领信息
+router.get('/getLostInfo',(req,res)=>{
+  getLostInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err)
+  })
+})
+
 // 发布失物招领
 router.post('/issueLoseInfo',(req,res)=>{
   issueLoseInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>{
     console.log(err);
+  })
+})
+
+// 查询表白模块信息
+router.get('/getLoveInfo',(req,res)=>{
+  getLoveInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 添加表白信息
+router.post('/issueLoveInfo',(req,res)=>{
+  issueLoveInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+
+// 发布需求
+router.post('/issueNeedInfo',(req,res)=>{
+  issueNeedInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 查询需求
+router.get('/getHelpInfo',(req,res)=>{
+  getHelpInfo().then(result=>{
+    res.send(new SuccessModel(result))
   })
 })
 router.get('/', function (req, res) {
