@@ -36,4 +36,11 @@ function getUserInfo(req) {
     resolve(userInfo[0].info)
   })
 }
+
+// 查询用户发布的记录
+function getIssueInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    
+  })
+}
 module.exports = { updateUserInfo,getOpenId, getUserInfo }

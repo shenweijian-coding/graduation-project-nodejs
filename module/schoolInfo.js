@@ -12,10 +12,22 @@ async function getNewsList(){
     }
   })
 }
+// 获取新闻详情
+async function getNewsInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    try {
+      const href = req.query.href
+      const newsDetail = await DB.find('schoolInfo', { href })
+      resolve(newsDetail[0])
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 // 获取通讯录
 async function getAddressInfo() {
   return new Promise(async (resolve,reject)=>{
-    const addressInfo = await DB.find('schoolInfo', {'_id':ObjectId('604c7360d69568cf6db38641')})
+    const addressInfo = await DB.find('schoolInfo', {'_id':ObjectId('606006210b487148f80cc410')})
     resolve(addressInfo[0].addressList)
   })
 }
@@ -32,11 +44,11 @@ async function getClubInfo(req) {
 async function getHomeInfo(){
   return new Promise(async(resolve,reject)=>{
     try {
-      const homeInfo = await DB.find('schoolInfo', {'_id':ObjectId('6050a205f1112d4d6607ceb2')})
+      const homeInfo = await DB.find('schoolInfo', {'_id':ObjectId('606005390b487148f80cc40f')})
       resolve(homeInfo[0])
     } catch (error) {
       reject(error)
     }
   })
 }
-module.exports = { getNewsList,getAddressInfo,getClubInfo,getHomeInfo }
+module.exports = { getNewsList,getAddressInfo,getClubInfo,getHomeInfo, getNewsInfo }

@@ -2,15 +2,22 @@ const express = require('express');
 const router = express.Router();
 const formidable = require('formidable');
 const fs = require('fs')
-const { getNewsList,getAddressInfo, getClubInfo, getHomeInfo } = require('../module/schoolInfo');
+const { getNewsList,getAddressInfo, getClubInfo, getHomeInfo,getNewsInfo } = require('../module/schoolInfo');
 const { getResellInfo, postTrade, issueLoseInfo, getLostInfo, issueNeedInfo,getHelpInfo } = require('../module/resell')
 const { SuccessModel, ErrorModel } = require('../module/resModel');
 const { updateUserInfo, getUserInfo } = require('../module/user');
-const { issueComment, getCommentList } = require('../module/common');
+const { issueComment, getCommentList, getRecommendInfo } = require('../module/common');
 const { getLoveInfo, issueLoveInfo } = require('../module/love');
 // 获取校园新闻数据
 router.get('/getNewsList',(req,res)=>{
   getNewsList().then(result=>{
+    res.send(new SuccessModel(result))
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+router.get('/getNewsInfo',(req,res)=>{
+  getNewsInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>{
     console.log(err);
@@ -148,6 +155,20 @@ router.post('/issueNeedInfo',(req,res)=>{
 // 查询需求
 router.get('/getHelpInfo',(req,res)=>{
   getHelpInfo().then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 最近发布的文章
+router.get('/getRecommendInfo',(req,res)=>{
+  getRecommendInfo().then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 查询发布的记录
+router.get('/getIssueInfo',(req,res)=>{
+  getIssueInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   })
 })

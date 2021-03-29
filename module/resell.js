@@ -18,6 +18,7 @@ function postTrade(req) {
     try {
       const tradeInfo = req.body
       const openId = req.openid
+      tradeInfo.openId = openId
       // 查询该用户信息
       const userList = await getUserInfoByOpenId(openId)
       if(!userList) resolve('未找到用户信息')
@@ -52,6 +53,7 @@ function issueLoseInfo(req){
   return new Promise(async(resolve,reject)=>{
     const lostInfo = req.body
     const openId = req.openid // 获取发布人openid
+    lostInfo.openId = openId
     // 查询该用户信息
     const userList = await getUserInfoByOpenId(openId)
     if(!userList) resolve('未找到用户信息')
@@ -70,6 +72,7 @@ function issueNeedInfo(req){
   return new Promise(async(resolve,reject)=>{
     const reqData = req.body
     const openId = req.openid
+    reqData.openId = openId
     // 查询该用户信息
     const userList = await getUserInfoByOpenId(openId)
     if(!userList) resolve('未找到用户信息')
