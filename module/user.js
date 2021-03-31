@@ -40,7 +40,10 @@ function getUserInfo(req) {
 // 查询用户发布的记录
 function getIssueInfo(req){
   return new Promise(async(resolve,reject)=>{
-    
+    const openId = req.openid
+    const { type } = req.query
+    const res = await DB.find( type,{ openId })
+    resolve(res)
   })
 }
-module.exports = { updateUserInfo,getOpenId, getUserInfo }
+module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo }

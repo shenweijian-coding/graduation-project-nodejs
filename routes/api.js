@@ -5,8 +5,8 @@ const fs = require('fs')
 const { getNewsList,getAddressInfo, getClubInfo, getHomeInfo,getNewsInfo } = require('../module/schoolInfo');
 const { getResellInfo, postTrade, issueLoseInfo, getLostInfo, issueNeedInfo,getHelpInfo } = require('../module/resell')
 const { SuccessModel, ErrorModel } = require('../module/resModel');
-const { updateUserInfo, getUserInfo } = require('../module/user');
-const { issueComment, getCommentList, getRecommendInfo } = require('../module/common');
+const { updateUserInfo, getUserInfo, getIssueInfo } = require('../module/user');
+const { issueComment, getCommentList, getRecommendInfo, delIssueInfo, isLike, getLikeIssueInfo } = require('../module/common');
 const { getLoveInfo, issueLoveInfo } = require('../module/love');
 // 获取校园新闻数据
 router.get('/getNewsList',(req,res)=>{
@@ -76,7 +76,7 @@ router.post('/upload',(req,res)=>{
 })
 // 获取交易信息 二手交易部分
 router.get('/getResellInfo', (req,res)=>{
-  getResellInfo().then(result=>{
+  getResellInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   }).catch(err=>{
     console.log(err);
@@ -154,14 +154,14 @@ router.post('/issueNeedInfo',(req,res)=>{
 
 // 查询需求
 router.get('/getHelpInfo',(req,res)=>{
-  getHelpInfo().then(result=>{
+  getHelpInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   })
 })
 
 // 最近发布的文章
 router.get('/getRecommendInfo',(req,res)=>{
-  getRecommendInfo().then(result=>{
+  getRecommendInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   })
 })
@@ -169,6 +169,26 @@ router.get('/getRecommendInfo',(req,res)=>{
 // 查询发布的记录
 router.get('/getIssueInfo',(req,res)=>{
   getIssueInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 删除发布记录
+router.get('/del',(req,res)=>{
+  delIssueInfo(req).then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+
+// 点赞与取消点赞
+router.get('/like',(req,res)=>{
+  isLike(req).then(result=>{
+    res.send(new SuccessModel(result))
+  })
+})
+// 查询喜欢的
+router.get('/getLikeIssueInfo',(req,res)=>{
+  getLikeIssueInfo(req).then(result=>{
     res.send(new SuccessModel(result))
   })
 })

@@ -1,5 +1,6 @@
 const { ObjectId } = require('bson')
 const DB = require('../DB/DB')
+const { SuccessModel } = require('./resModel')
 // 通过openid获取用户信息
 function getUserInfoByOpenId(openId) {
   return new Promise(async (resolve, reject) => {
@@ -11,6 +12,12 @@ function getUserInfoByOpenId(openId) {
 function addNewUserInfo(openId, insertName, insertData) {
   return new Promise(async (resolve, reject) => {
     await DB.addto('userInfo', { openId }, { [insertName]: insertData })
+    resolve()
+  })
+}
+function delUserInfo(openId,insertName,insertData){
+  return new Promise(async (resolve, reject) => {
+    await DB.updateMany('userInfo', { openId }, { [insertName]: insertData })
     resolve()
   })
 }
@@ -65,11 +72,97 @@ function getCommentList(req) {
   })
 }
 // 获取推荐信息
-function getRecommendInfo(){
+function getRecommendInfo(req){
   return new Promise(async(resolve,reject)=>{
+    const openId = req.openid
+    const userInfo = await DB.find('userInfo',{ openId })
+    const likeList = userInfo[0].likeList
     const tradeInfo = await DB.find('trade',{})
+    tradeInfo.forEach(element => {
+      for (let i = 0; i < likeList.trade.length; i++) {
+        if(element._id == likeList.trade[i]){
+          element.isLike = true
+        }
+      }
+    });
     const helpInfo = await DB.find('help',{})
+    helpInfo.forEach(element => {
+      for (let i = 0; i < likeList.help.length; i++) {
+        if(element._id == likeList.help[i]){
+          element.isLike = true
+        }
+      }
+    });
     resolve([...tradeInfo,...helpInfo])
+  })
+}
+
+// 删除发布记录
+function delIssueInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    const openId = req.openid
+    const { id,dbName } = req.query
+    console.log(id,dbName);
+    const res = await DB.find(dbName,{ '_id':ObjectId(id) })
+    if(!res.length) return
+    console.log(res);
+    if(res[0].openId !== openId) {
+      resolve('您无权限删除')
+      return
+    }
+    DB.remove(dbName,{ '_id':ObjectId(id) })
+    resolve('删除成功')
+  })
+}
+
+// 点赞与取消点赞
+function isLike(req){
+  return new Promise(async(resolve,reject)=>{
+    const openId = req.openid
+    const { isLike,id,dbName } = req.query
+    const res = await DB.find(dbName,{ '_id':ObjectId(id) })
+    if(!res.length) return
+    if(isLike === 'true') { // 增加
+      await DB.update(dbName,{'_id':ObjectId(id)},{ likeNum: parseInt(res[0].likeNum) + 1 })
+      addNewUserInfo(openId,`likeList.${dbName}`,id)
+    }else { // 减少
+      if(res[0].likeNum == 0) return
+      await DB.update(dbName,{'_id':ObjectId(id)},{ likeNum: parseInt(res[0].likeNum) - 1 })
+      delUserInfo(openId,`likeList.${dbName}`,id)
+    }
+    // 将喜欢的发表放到个人中心中
+    resolve({})
+  })
+}
+function getLikeIssueInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    const openId = req.openid
+    const userInfo = await DB.find('userInfo', { openId })
+    if(!userInfo.length) {
+      resolve({})
+      return
+    }
+    const likeList = userInfo[0].likeList
+    const res = await getCurDataById(likeList)
+    resolve(res)
+  })
+}
+// 通过id查找对应数据
+function getCurDataById(dataList){
+  return new Promise(async(resolve,reject)=>{
+    let info = []
+    for (const key in dataList) {
+      if (Object.hasOwnProperty.call(dataList, key) && dataList[key].length) {
+        let querySql = []
+        for (let i = 0; i < dataList[key].length; i++) {
+          console.log(dataList[key][i]['_id']);
+          querySql.push({ "_id":ObjectId(dataList[key][i]) })
+        }
+        const res = await DB.find(key,{$or:querySql})
+        info = [...info,...res]
+      }
+    }
+    resolve(info)
   })
 }
 module.exports = {
@@ -77,5 +170,8 @@ module.exports = {
   addNewUserInfo,
   issueComment,
   getCommentList,
-  getRecommendInfo
+  getRecommendInfo,
+  delIssueInfo,
+  isLike,
+  getLikeIssueInfo
 }

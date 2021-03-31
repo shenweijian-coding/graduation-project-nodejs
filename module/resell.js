@@ -1,10 +1,21 @@
 const DB = require('../DB/DB')
 const { getUserInfoByOpenId, addNewUserInfo } = require('../module/common')
 // 获取物品发布信息
-function getResellInfo() {
+function getResellInfo(req) {
   return new Promise(async(resolve,reject)=>{
     try {
       const resellInfo = await DB.find('trade', {})
+      const openId = req.openid
+      const userInfo = await DB.find('userInfo',{ openId })
+      const likeList = userInfo[0].likeList
+      resellInfo.forEach(element => {
+        for (let i = 0; i < likeList.trade.length; i++) {
+          if(element._id == likeList.trade[i]){
+            element.isLike = true
+          }
+        }
+      });
+
       resolve(resellInfo)
     } catch (error) {
       reject(error)
@@ -85,9 +96,19 @@ function issueNeedInfo(req){
   })
 }
 // 查询需求
-function getHelpInfo(){
+function getHelpInfo(req){
   return new Promise(async(resolve,reject)=>{
     const helpInfo = await DB.find('help',{})
+    const openId = req.openid
+    const userInfo = await DB.find('userInfo',{ openId })
+    const likeList = userInfo[0].likeList
+    helpInfo.forEach(element => {
+      for (let i = 0; i < likeList.help.length; i++) {
+        if(element._id == likeList.help[i]){
+          element.isLike = true
+        }
+      }
+    });
     resolve(helpInfo)
   })
 }

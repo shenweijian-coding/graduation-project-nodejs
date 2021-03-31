@@ -50,7 +50,19 @@ class Db{
       })
     })
   }
-
+  updateMany(collectionName,json1,json2){
+    return new Promise((resolve,reject)=>{
+      this.connect().then(db=>{
+        const result = db.collection(collectionName).updateMany(json1,{'$pull':json2},(err,result)=>{
+          if(err){
+            reject(err)
+          }else{
+            resolve(result)
+          }
+        })
+      })
+    })
+  }
   update(collectionName,json1,json2){
     return new Promise((resolve,reject)=>{
       this.connect().then(db=>{
@@ -82,6 +94,19 @@ class Db{
     return new Promise((resolve,reject)=>{
       this.connect().then(db=>{
         const result = db.collection(collectionName).insertOne(json,function(err,result){
+          if(err){
+            reject(err)
+          }else{
+            resolve(result)
+          }
+        })
+      })
+    })
+  }
+  remove(collectionName,json){
+    return new Promise((resolve,reject)=>{
+      this.connect().then(db=>{
+        const result = db.collection(collectionName).deleteOne(json,function(err,result){
           if(err){
             reject(err)
           }else{
