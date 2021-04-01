@@ -74,18 +74,19 @@ function getCommentList(req) {
 // 获取推荐信息
 function getRecommendInfo(req){
   return new Promise(async(resolve,reject)=>{
+    const { pageSize = 0, pageNum = 10 } = req.query
     const openId = req.openid
     const userInfo = await DB.find('userInfo',{ openId })
     const likeList = userInfo[0].likeList
-    const tradeInfo = await DB.find('trade',{})
+    const tradeInfo = await DB.find('trade',{},pageSize,pageNum)
     tradeInfo.forEach(element => {
       for (let i = 0; i < likeList.trade.length; i++) {
-        if(element._id == likeList.trade[i]){
+        if(element._id == likeList.trade[i]) {
           element.isLike = true
         }
       }
     });
-    const helpInfo = await DB.find('help',{})
+    const helpInfo = await DB.find('help',{},pageSize,pageNum)
     helpInfo.forEach(element => {
       for (let i = 0; i < likeList.help.length; i++) {
         if(element._id == likeList.help[i]){

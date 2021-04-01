@@ -33,8 +33,8 @@ function postTrade(req) {
       // 查询该用户信息
       const userList = await getUserInfoByOpenId(openId)
       if(!userList) resolve('未找到用户信息')
-      const userInfo = userList[0].info.userInfo
-      userInfo.name = userList[0].info.schoolInfo.name
+      let userInfo = userList[0].info.userInfo
+      userInfo = { ...userInfo, ...userList[0].info.schoolInfo }
       // 插入数据并 获取插入的id
       const { insertedId } = await DB.insert('trade', { ...tradeInfo, userInfo })
       // 将id绑定到userInfo集合

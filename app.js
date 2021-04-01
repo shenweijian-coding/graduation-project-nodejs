@@ -6,7 +6,7 @@ const fs = require('fs');
 const { getOpenId } = require('./module/user');
 const { ErrorModel } = require('./module/resModel');
 const app = express()
-const port = 3000
+const port = 3001
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
@@ -15,8 +15,8 @@ app.use(bodyParser.json())
 app.use('/public', express.static('public'));
 // https 证书配置
 const httpsOption = {
-  // key : fs.readFileSync("./2_yuanxiaoshen.com.key"),
-  // cert: fs.readFileSync("./1_yuanxiaoshen.com_bundle.pem")
+  key : fs.readFileSync("./config/2_yuanxiaoshen.com.key"),
+  cert: fs.readFileSync("./config/1_yuanxiaoshen.com_bundle.pem")
 }
 app.use('/wx', require('./routes/wx'))
 
@@ -30,4 +30,5 @@ app.use('/api', require('./routes/api'));
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
+// https.createServer(httpsOption,app).listen(port,()=>{console.log('success')});
 http.createServer(app).listen(port,()=>{console.log('success')});

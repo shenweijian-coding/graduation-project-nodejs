@@ -35,11 +35,11 @@ class Db{
     })
   }
 
-  find(collectionName,json){
+  find(collectionName,json,start = 0,num = 10){
     // console.log(collectionName,json);
     return new Promise((resolve,reject)=>{
       this.connect().then(db=>{
-        const result = db.collection(collectionName).find(json)
+        const result = db.collection(collectionName).find(json).skip(parseFloat(start)).limit(parseFloat(num))
         result.toArray((err,docs)=>{
           if(err){
             reject(err)
