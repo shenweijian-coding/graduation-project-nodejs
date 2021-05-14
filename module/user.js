@@ -1,6 +1,24 @@
 const request = require('../tool/request')
 const DB = require('../DB/DB')
 const { ObjectId } = require('bson')
+
+// 管理员登录
+function login(req){
+  return new Promise(async(resolve,reject)=>{
+    const { uid,pwd } = req.body
+    console.log(uid,pwd);
+    const info = await DB.find('admin', { "uid":uid })
+    if(info.length!=1){
+      reject('未找到该账号')
+    }
+    console.log(info);
+    if(info[0].pwd === pwd){
+      resolve('登录成功')
+    }else{
+      reject('密码错误')
+    }
+  })
+}
 // 获取cookie
 function getOpenId(req){
   const openid = req.headers.cookie
@@ -46,4 +64,4 @@ function getIssueInfo(req){
     resolve(res)
   })
 }
-module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo }
+module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo,login }

@@ -19,7 +19,7 @@ const httpsOption = {
   cert: fs.readFileSync("./config/1_yuanxiaoshen.com_bundle.pem")
 }
 app.use('/wx', require('./routes/wx'))
-
+app.use('/admin',require('./routes/admin'))
 // 获取openId
 app.use((req,res,next)=>{
   getOpenId(req) ? res.send(new ErrorModel('非法访问')) : next()
