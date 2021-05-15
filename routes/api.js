@@ -136,7 +136,7 @@ router.get('/getLoveInfo',(req,res)=>{
   })
 })
 
-// 添加表白信息
+// 发布表白信息
 router.post('/issueLoveInfo',(req,res)=>{
   issueLoveInfo(req).then(result=>{
     res.send(new SuccessModel(result))

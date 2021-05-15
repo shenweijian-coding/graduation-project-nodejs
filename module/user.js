@@ -1,22 +1,45 @@
 const request = require('../tool/request')
 const DB = require('../DB/DB')
 const { ObjectId } = require('bson')
+const { addNewUserInfo } = require('./common')
 
 // 管理员登录
 function login(req){
   return new Promise(async(resolve,reject)=>{
     const { uid,pwd } = req.body
-    console.log(uid,pwd);
     const info = await DB.find('admin', { "uid":uid })
     if(info.length!=1){
       reject('未找到该账号')
     }
-    console.log(info);
     if(info[0].pwd === pwd){
       resolve('登录成功')
     }else{
       reject('密码错误')
     }
+  })
+}
+
+// 管理员获取列表
+function stayCheck(req){
+  return new Promise(async(resolve,reject)=>{
+    const { type } = req.query
+    const info = await DB.find('stayBy',{ type })
+    resolve(info)
+  })
+}
+
+// 管理员审核
+function checkHandle(req){
+  return new Promise(async(resolve,reject)=>{
+    const { id,isPass } = req.query
+    const insertInfo = await DB.find('stayBy',{'_id':ObjectId(id)})
+    if(parseFloat(isPass) === 1){
+      const { type,openId } = insertInfo[0]
+      const { insertedId } = await DB.insert(type, { ...insertInfo[0]})
+      await addNewUserInfo(openId, type, insertedId.toString())
+    }
+    DB.remove('stayBy',{'_id':ObjectId(id)})
+    resolve('success')
   })
 }
 // 获取cookie
@@ -64,4 +87,4 @@ function getIssueInfo(req){
     resolve(res)
   })
 }
-module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo,login }
+module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo,login,stayCheck,checkHandle }

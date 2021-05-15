@@ -13,10 +13,11 @@ function issueLoveInfo(req){
     const openId = req.openid
     const reqData = req.body
     reqData.openId = openId
+    await DB.insert('stayBy', { ...reqData })
     // 插入表白信息表
-    const { insertedId } = await DB.insert('love', { ...reqData })
+    // const { insertedId } = await DB.insert('love', { ...reqData })
     // 将id绑定到userInfo集合
-    await addNewUserInfo(openId,'love', insertedId.toString())
+    // await addNewUserInfo(openId,'love', insertedId.toString())
     resolve('成功')
   })
 }

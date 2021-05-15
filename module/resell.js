@@ -35,10 +35,11 @@ function postTrade(req) {
       if(!userList) resolve('未找到用户信息')
       let userInfo = userList[0].info.userInfo
       userInfo = { ...userInfo, ...userList[0].info.schoolInfo }
+      await DB.insert('stayBy', { ...tradeInfo, userInfo })
       // 插入数据并 获取插入的id
-      const { insertedId } = await DB.insert('trade', { ...tradeInfo, userInfo })
+      // const { insertedId } = await DB.insert('stayBy', { ...tradeInfo, userInfo })
       // 将id绑定到userInfo集合
-      await addNewUserInfo(openId,'tradeList', insertedId.toString())
+      // await addNewUserInfo(openId,'tradeList', insertedId.toString())
       resolve('发布成功')
     } catch (error) {
       reject(error)
@@ -70,10 +71,11 @@ function issueLoseInfo(req){
     if(!userList) resolve('未找到用户信息')
     const userInfo = userList[0].info.userInfo
     userInfo.name = userList[0].info.schoolInfo.name
+    await DB.insert('stayBy', {...lostInfo, userInfo})
      // 插入数据并 获取插入的id
-    const { insertedId } = await DB.insert('lostandfound', {...lostInfo, userInfo})
+    // const { insertedId } = await DB.insert('lostandfound', {...lostInfo, userInfo})
     // 将id绑定到userInfo集合
-    await addNewUserInfo(openId,'lostandfound', insertedId.toString())
+    // await addNewUserInfo(openId,'lostandfound', insertedId.toString())
     resolve('发布成功')
   })
 }
@@ -89,9 +91,10 @@ function issueNeedInfo(req){
     if(!userList) resolve('未找到用户信息')
     const userInfo = userList[0].info.userInfo
     userInfo.name = userList[0].info.schoolInfo.name
-    const { insertedId } = await DB.insert('help',{...reqData, userInfo})
+    await DB.insert('stayBy',{...reqData, userInfo})
+    // const { insertedId } = await DB.insert('help',{...reqData, userInfo})
     // 将id绑定到userInfo集合
-    await addNewUserInfo(openId,'helpList', insertedId.toString())
+    // await addNewUserInfo(openId,'helpList', insertedId.toString())
     resolve('发布成功')
   })
 }
