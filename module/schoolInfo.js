@@ -51,4 +51,16 @@ async function getHomeInfo(){
     }
   })
 }
-module.exports = { getNewsList,getAddressInfo,getClubInfo,getHomeInfo, getNewsInfo }
+
+async function editNoticeInfo(req){
+  return new Promise(async(resolve,reject)=>{
+    try {
+      const { noticeInfo } = req.body
+      await DB.update('schoolInfo',{ _id:ObjectId('606005390b487148f80cc40f') }, { notice: noticeInfo })
+      resolve('success')
+    } catch (error) {
+      
+    }
+  })
+}
+module.exports = { getNewsList,getAddressInfo,editNoticeInfo,getClubInfo,getHomeInfo, getNewsInfo }

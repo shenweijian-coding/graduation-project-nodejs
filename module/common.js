@@ -1,6 +1,10 @@
 const { ObjectId } = require('bson')
+const { request } = require('../tool/request')
 const DB = require('../DB/DB')
 const { SuccessModel } = require('./resModel')
+const moment = require('moment')
+const { wxApp } = require('../config/config')
+
 // 通过openid获取用户信息
 function getUserInfoByOpenId(openId) {
   return new Promise(async (resolve, reject) => {
@@ -19,6 +23,14 @@ function delUserInfo(openId,insertName,insertData){
   return new Promise(async (resolve, reject) => {
     await DB.updateMany('userInfo', { openId }, { [insertName]: insertData })
     resolve()
+  })
+}
+// 通过id 和 数据库 名字 查询 对于帖子
+function getCurPostInfo(dbName,id){
+  return new Promise(async(resolve,reject)=>{
+    console.log(dbName,id);
+    const info = await DB.find(dbName,{ _id:ObjectId(id) })
+    resolve(info[0])
   })
 }
 // 发布评论
@@ -48,7 +60,69 @@ function issueComment(req) {
     }
     // 将trade表的评论数+1 异步即可
     addCommentNum(id, dbName)
+    // 发布订阅消息
+    subscribeMessage({ dbName, id, commentInfo })
     resolve('评论成功')
+  })
+}
+
+// 微信订阅消息发布
+function subscribeMessage({ dbName, id, commentInfo }){
+  return new Promise(async(resolve, reject)=>{
+    const info = await getCurPostInfo(dbName, id)
+    // 获取accesstoken
+    const access_token = await getAssessToken()
+    const res = await request({
+      url: `https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${access_token}`,
+      method: 'POST',
+      data:{
+        access_token: access_token,
+        touser: info.openId,
+        template_id: 'sF1GNcIRY1koF-7kGTa5hqIqm92HHIxfoM3zqky8tkA',
+        data:{
+          thing1:{ // 回复人
+            value:commentInfo.name
+          },          
+          thing2:{ // 回复内容
+            value:commentInfo.desc
+          },          
+          time3:{ // 回复时间
+            value: commentInfo.createTime
+          },          
+          thing5:{ // 回复主题
+            value:info.desc
+          }
+        }
+      }
+    })
+    console.log(res);
+  })
+}
+
+// 获取接口凭证
+async function getAssessToken(){
+  return new Promise(async(resolve,reject)=>{
+    const access_tokenInfo = await DB.find('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') })
+    let access_token
+    if(access_tokenInfo[0].time !== '' && access_tokenInfo[0].access_token !== ''){
+      if(parseFloat(access_tokenInfo[0].time) + 5400 > new Date().getTime()/1000){
+        access_token = access_tokenInfo[0].access_token
+      }else{
+        const wxRes = await request({
+          url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wxApp.AppID}&secret=${wxApp.AppSecret}`
+        })
+        access_token = wxRes.access_token
+        await DB.update('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') },{ access_token: access_token, time: new Date().getTime()/1000 })
+      }
+    }else{
+      const wxRes = await request({
+        url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wxApp.AppID}&secret=${wxApp.AppSecret}`
+      })
+      access_token = wxRes.access_token
+      await DB.update('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') },{ access_token: access_token, time: new Date().getTime()/1000 })
+
+    }
+    resolve(access_token)
   })
 }
 // 评论数进行++操作

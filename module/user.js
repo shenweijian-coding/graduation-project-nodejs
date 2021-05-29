@@ -42,6 +42,33 @@ function checkHandle(req){
     resolve('success')
   })
 }
+
+// 管理员添加通讯录
+function addAddress(req){
+  return new Promise(async(resolve,reject)=>{
+    const { type, title, tel } = req.body
+    const addressInfo = await DB.find('schoolInfo',{ _id:ObjectId('606006210b487148f80cc410') })
+    const resArr = addressInfo[0].addressList
+    for (let i = 0; i < resArr.length; i++) {
+      if(resArr[i].title === type){
+        resArr[i].phoneList.push({ name:title, phone:tel })
+      }
+    }
+    await DB.update('schoolInfo', { _id:ObjectId('606006210b487148f80cc410') }, {addressList:resArr})
+    resolve({})
+  })
+}
+
+// 管理员添加社团
+function addClub(req){
+  return new Promise(async(resolve,reject)=>{
+    console.log(req.body);
+    await DB.insert('club', { ...req.body })
+    resolve({})
+  })
+}
+
+
 // 获取cookie
 function getOpenId(req){
   const openid = req.headers.cookie
@@ -87,4 +114,4 @@ function getIssueInfo(req){
     resolve(res)
   })
 }
-module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo,login,stayCheck,checkHandle }
+module.exports = { updateUserInfo,getOpenId, getUserInfo,getIssueInfo,login,stayCheck,checkHandle,addClub,addAddress }
