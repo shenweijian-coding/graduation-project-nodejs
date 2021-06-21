@@ -1,10 +1,11 @@
 
 const DB = require('../DB/DB');
-const { addNewUserInfo } = require('./common');
-function getLoveInfo(){
+const { sendMail } = require('./common');
+function getLoveInfo(req){
   return new Promise(async(resolve,reject)=>{
-    const loveInfo = await DB.find('love',{})
-    console.log(loveInfo);
+    const { pageNum, pageSize } = req.query
+    const loveInfo = await DB.find('love',{}, pageSize, pageNum)
+    // console.log(loveInfo);
     resolve(loveInfo)
   })
 }
@@ -14,6 +15,7 @@ function issueLoveInfo(req){
     const reqData = req.body
     reqData.openId = openId
     await DB.insert('stayBy', { ...reqData })
+    sendMail()
     // 插入表白信息表
     // const { insertedId } = await DB.insert('love', { ...reqData })
     // 将id绑定到userInfo集合

@@ -62,7 +62,7 @@ function addAddress(req){
 // 管理员添加社团
 function addClub(req){
   return new Promise(async(resolve,reject)=>{
-    console.log(req.body);
+    // console.log(req.body);
     await DB.insert('club', { ...req.body })
     resolve({})
   })

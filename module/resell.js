@@ -1,10 +1,11 @@
 const DB = require('../DB/DB')
-const { getUserInfoByOpenId, addNewUserInfo } = require('../module/common')
+const { getUserInfoByOpenId, addNewUserInfo, sendMail } = require('../module/common')
 // 获取物品发布信息
 function getResellInfo(req) {
   return new Promise(async(resolve,reject)=>{
     try {
-      const resellInfo = await DB.find('trade', {})
+      const { pageNum, pageSize } = req.query
+      const resellInfo = await DB.find('trade', {}, pageSize, pageNum)
       const openId = req.openid
       const userInfo = await DB.find('userInfo',{ openId })
       const likeList = userInfo[0].likeList
@@ -36,6 +37,7 @@ function postTrade(req) {
       let userInfo = userList[0].info.userInfo
       userInfo = { ...userInfo, ...userList[0].info.schoolInfo }
       await DB.insert('stayBy', { ...tradeInfo, userInfo })
+      sendMail()
       // 插入数据并 获取插入的id
       // const { insertedId } = await DB.insert('stayBy', { ...tradeInfo, userInfo })
       // 将id绑定到userInfo集合
@@ -92,6 +94,7 @@ function issueNeedInfo(req){
     const userInfo = userList[0].info.userInfo
     userInfo.name = userList[0].info.schoolInfo.name
     await DB.insert('stayBy',{...reqData, userInfo})
+    sendMail()
     // const { insertedId } = await DB.insert('help',{...reqData, userInfo})
     // 将id绑定到userInfo集合
     // await addNewUserInfo(openId,'helpList', insertedId.toString())
@@ -101,7 +104,8 @@ function issueNeedInfo(req){
 // 查询需求
 function getHelpInfo(req){
   return new Promise(async(resolve,reject)=>{
-    const helpInfo = await DB.find('help',{})
+    const { pageNum, pageSize } = req.query
+    const helpInfo = await DB.find('help',{}, pageSize, pageNum )
     const openId = req.openid
     const userInfo = await DB.find('userInfo',{ openId })
     const likeList = userInfo[0].likeList

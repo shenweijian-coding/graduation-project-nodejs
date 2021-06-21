@@ -1,10 +1,10 @@
 const { ObjectId } = require('bson')
 const { request } = require('../tool/request')
 const DB = require('../DB/DB')
-const { SuccessModel } = require('./resModel')
-const moment = require('moment')
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 const { wxApp } = require('../config/config')
-
+const { email } = require('../config/config')
 // 通过openid获取用户信息
 function getUserInfoByOpenId(openId) {
   return new Promise(async (resolve, reject) => {
@@ -28,7 +28,7 @@ function delUserInfo(openId,insertName,insertData){
 // 通过id 和 数据库 名字 查询 对于帖子
 function getCurPostInfo(dbName,id){
   return new Promise(async(resolve,reject)=>{
-    console.log(dbName,id);
+    // console.log(dbName,id);
     const info = await DB.find(dbName,{ _id:ObjectId(id) })
     resolve(info[0])
   })
@@ -36,21 +36,7 @@ function getCurPostInfo(dbName,id){
 // 发布评论
 function issueComment(req) {
   return new Promise(async (resolve, reject) => {
-    const { commentInfo, id, type } = req.body
-    let dbName = ''
-    switch (type) {
-      case 1:
-        dbName = 'trade'
-        break;
-      case 2:
-        dbName = 'help'
-        break;
-      case 3:
-        dbName = 'love'
-        break;
-      default:
-        break;
-    }
+    const { commentInfo, id, dbName } = req.body
     // 先判断评论集合中是否已有该物品下的交易
     const comRes = await DB.find('comment', { id })
     if (comRes.length) { // 如果有 则执行评论追加
@@ -95,14 +81,14 @@ function subscribeMessage({ dbName, id, commentInfo }){
         }
       }
     })
-    console.log(res);
+    // console.log(res);
   })
 }
 
 // 获取接口凭证
 async function getAssessToken(){
   return new Promise(async(resolve,reject)=>{
-    const access_tokenInfo = await DB.find('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') })
+    const access_tokenInfo = await DB.find('setting',{ _id:ObjectId('60b1d8f94337153ee8da456a') })
     let access_token
     if(access_tokenInfo[0].time !== '' && access_tokenInfo[0].access_token !== ''){
       if(parseFloat(access_tokenInfo[0].time) + 5400 > new Date().getTime()/1000){
@@ -112,14 +98,14 @@ async function getAssessToken(){
           url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wxApp.AppID}&secret=${wxApp.AppSecret}`
         })
         access_token = wxRes.access_token
-        await DB.update('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') },{ access_token: access_token, time: new Date().getTime()/1000 })
+        await DB.update('setting',{ _id:ObjectId('60b1d8f94337153ee8da456a') },{ access_token: access_token, time: new Date().getTime()/1000 })
       }
     }else{
       const wxRes = await request({
         url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wxApp.AppID}&secret=${wxApp.AppSecret}`
       })
       access_token = wxRes.access_token
-      await DB.update('setting',{ _id:ObjectId('60b1e2c02adc4b174f3328d6') },{ access_token: access_token, time: new Date().getTime()/1000 })
+      await DB.update('setting',{ _id:ObjectId('60b1d8f94337153ee8da456a') },{ access_token: access_token, time: new Date().getTime()/1000 })
 
     }
     resolve(access_token)
@@ -177,10 +163,10 @@ function delIssueInfo(req){
   return new Promise(async(resolve,reject)=>{
     const openId = req.openid
     const { id,dbName } = req.query
-    console.log(id,dbName);
+    // console.log(id,dbName);
     const res = await DB.find(dbName,{ '_id':ObjectId(id) })
     if(!res.length) return
-    console.log(res);
+    // console.log(res);
     if(res[0].openId !== openId) {
       resolve('您无权限删除')
       return
@@ -230,7 +216,7 @@ function getCurDataById(dataList){
       if (Object.hasOwnProperty.call(dataList, key) && dataList[key].length) {
         let querySql = []
         for (let i = 0; i < dataList[key].length; i++) {
-          console.log(dataList[key][i]['_id']);
+          // console.log(dataList[key][i]['_id']);
           querySql.push({ "_id":ObjectId(dataList[key][i]) })
         }
         const res = await DB.find(key,{$or:querySql})
@@ -240,6 +226,39 @@ function getCurDataById(dataList){
     resolve(info)
   })
 }
+
+// 发送邮件的方法
+const transporter = nodemailer.createTransport(smtpTransport({
+  service: email.service,
+  auth: {
+    user: email.user,//发信人账号
+    pass: email.pass//发信人密码
+  },
+}));
+async function sendMail() {
+  const adminInfo = await DB.find('admin', { _id:ObjectId('609e7f9a7325ad868d79ee1e') })
+  const address = adminInfo[0].email
+  console.log(address);
+  transporter.sendMail({
+    from: '"北院校园通" <2628349880@qq.com>',//发信人config
+    to: address, //adress 收件人
+    cc: '',
+    subject: '帖子审核通知',//subject 发送的主题
+    html: 'Hi  &nbsp;&nbsp;北院校园通管理员,<br>' +
+      '<br>有同学发布新帖子了，快去审核通过吧！<br>' +
+      '<br>' +
+      '<br>' +
+      'Best Regards<br>' +
+      '<br>'//html 发送的html内容
+  }, function (err, result) {
+    if (err) {
+      console.log("send email errror:" + err);
+    } else {
+      console.log("send email success!");
+    }
+  });
+}
+
 module.exports = {
   getUserInfoByOpenId,
   addNewUserInfo,
@@ -248,5 +267,6 @@ module.exports = {
   getRecommendInfo,
   delIssueInfo,
   isLike,
-  getLikeIssueInfo
+  getLikeIssueInfo,
+  sendMail
 }

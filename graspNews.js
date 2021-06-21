@@ -3,6 +3,15 @@ const cheerio = require('cheerio')
 const DB = require('./DB/DB')
 const { ObjectId } = require('bson')
 const { sleep } = require('./tool/util')
+
+// let rule = new schedule.RecurrenceRule()
+// rule.hour =1;
+// rule.minute =0;
+// rule.second =0;
+// schedule.scheduleJob(rule, async function(){
+//   graspNews()
+// })
+
 // 每日请求校园官网数据 填充至本地数据库
 async function graspNews(){
   const source = await request({
@@ -31,6 +40,7 @@ async function graspNews(){
     }
     newsList.push(item)
   }
+  // console.log(newsList);
   getNewsDetail(newsHref)
   DB.update('schoolInfo', { "_id": ObjectId('604b48c29382b35c705b387c') }, { "newsList":newsList })
 }

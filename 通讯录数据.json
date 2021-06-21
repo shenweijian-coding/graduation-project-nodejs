@@ -1,391 +1,58 @@
-[
-  {
-    "title": "宿舍",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "17088458215"
-      },
-      {
-        "name": "s",
-        "phone": "13203491644"
-      },
-      {
-        "name": "s",
-        "phone": "18904188013"
-      },
-      {
-        "name": "s",
-        "phone": "13385364462"
-      },
-      {
-        "name": "s",
-        "phone": "18944090649"
-      },
-      {
-        "name": "s",
-        "phone": "13285867315"
-      }
-    ]
-  },
-  {
-    "title": "食堂",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "17078642985"
-      },
-      {
-        "name": "s",
-        "phone": "18941448932"
-      },
-      {
-        "name": "s",
-        "phone": "13538416936"
-      },
-      {
-        "name": "s",
-        "phone": "13804539331"
-      },
-      {
-        "name": "s",
-        "phone": "13230473967"
-      },
-      {
-        "name": "s",
-        "phone": "18798810570"
-      },
-      {
-        "name": "s",
-        "phone": "18942958468"
-      },
-      {
-        "name": "s",
-        "phone": "13574513817"
-      },
-      {
-        "name": "s",
-        "phone": "18905552354"
-      },
-      {
-        "name": "s",
-        "phone": "13091116233"
-      }
-    ]
-  },
-  {
-    "title": "学院电话",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "18774226905"
-      },
-      {
-        "name": "s",
-        "phone": "18779413979"
-      },
-      {
-        "name": "s",
-        "phone": "13558836597"
-      },
-      {
-        "name": "s",
-        "phone": "18969788555"
-      },
-      {
-        "name": "s",
-        "phone": "13086383371"
-      },
-      {
-        "name": "s",
-        "phone": "13520307274"
-      },
-      {
-        "name": "s",
-        "phone": "13813515604"
-      },
-      {
-        "name": "s",
-        "phone": "13065008330"
-      },
-      {
-        "name": "s",
-        "phone": "13336455606"
-      },
-      {
-        "name": "s",
-        "phone": "13739848394"
-      }
-    ]
-  },
-  {
-    "title": "校园服务",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "13564613682"
-      },
-      {
-        "name": "s",
-        "phone": "13820519409"
-      },
-      {
-        "name": "s",
-        "phone": "18999887689"
-      },
-      {
-        "name": "s",
-        "phone": "13249531418"
-      },
-      {
-        "name": "s",
-        "phone": "13036960886"
-      },
-      {
-        "name": "s",
-        "phone": "13816240328"
-      },
-      {
-        "name": "s",
-        "phone": "13210762204"
-      },
-      {
-        "name": "s",
-        "phone": "18726161691"
-      },
-      {
-        "name": "s",
-        "phone": "13076738397"
-      },
-      {
-        "name": "s",
-        "phone": "13320230003"
-      }
-    ]
-  },
-  {
-    "title": "维修",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "17022064950"
-      },
-      {
-        "name": "s",
-        "phone": "17058011800"
-      },
-      {
-        "name": "s",
-        "phone": "13281754235"
-      },
-      {
-        "name": "s",
-        "phone": "13591103083"
-      },
-      {
-        "name": "s",
-        "phone": "13079180578"
-      },
-      {
-        "name": "s",
-        "phone": "13576939298"
-      },
-      {
-        "name": "s",
-        "phone": "13316745108"
-      },
-      {
-        "name": "s",
-        "phone": "13780589928"
-      },
-      {
-        "name": "s",
-        "phone": "13183264208"
-      },
-      {
-        "name": "s",
-        "phone": "13142669972"
-      }
-    ]
-  },
-  {
-    "title": "快递代收",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "13887346644"
-      },
-      {
-        "name": "s",
-        "phone": "17009232164"
-      },
-      {
-        "name": "s",
-        "phone": "13248696242"
-      },
-      {
-        "name": "s",
-        "phone": "17003137928"
-      },
-      {
-        "name": "s",
-        "phone": "13217451133"
-      },
-      {
-        "name": "s",
-        "phone": "13844582863"
-      },
-      {
-        "name": "s",
-        "phone": "13154845916"
-      },
-      {
-        "name": "s",
-        "phone": "13344051665"
-      },
-      {
-        "name": "s",
-        "phone": "13183264208"
-      },
-      {
-        "name": "s",
-        "phone": "13547466063"
-      }
-    ]
-  },
-  {
-    "title": "超市",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "13162144563"
-      },
-      {
-        "name": "s",
-        "phone": "13264872805"
-      },
-      {
-        "name": "s",
-        "phone": "13764894801"
-      },
-      {
-        "name": "s",
-        "phone": "13291520452"
-      },
-      {
-        "name": "s",
-        "phone": "13717171145"
-      },
-      {
-        "name": "s",
-        "phone": "13343978750"
-      },
-      {
-        "name": "s",
-        "phone": "13115005757"
-      },
-      {
-        "name": "s",
-        "phone": "13041805101"
-      },
-      {
-        "name": "s",
-        "phone": "13813212156"
-      },
-      {
-        "name": "s",
-        "phone": "13282673061"
-      }
-    ]
-  },
-  {
-    "title": "食堂",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "13063827084"
-      },
-      {
-        "name": "s",
-        "phone": "13345464728"
-      },
-      {
-        "name": "s",
-        "phone": "17091708483"
-      },
-      {
-        "name": "s",
-        "phone": "17011656584"
-      },
-      {
-        "name": "s",
-        "phone": "17003088655"
-      },
-      {
-        "name": "s",
-        "phone": "13021628168"
-      },
-      {
-        "name": "s",
-        "phone": "13379170112"
-      },
-      {
-        "name": "s",
-        "phone": "13321078662"
-      },
-      {
-        "name": "s",
-        "phone": "13813212156"
-      },
-      {
-        "name": "s",
-        "phone": "18985647935"
-      }
-    ]
-  },
-  {
-    "title": "社团",
-    "phoneList": [
-      {
-        "name": "s",
-        "phone": "18702423778"
-      },
-      {
-        "name": "s",
-        "phone": "13345464728"
-      },
-      {
-        "name": "s",
-        "phone": "13190014577"
-      },
-      {
-        "name": "s",
-        "phone": "17011656584"
-      },
-      {
-        "name": "s",
-        "phone": "13778640654"
-      },
-      {
-        "name": "s",
-        "phone": "13021628168"
-      },
-      {
-        "name": "s",
-        "phone": "13379170112"
-      },
-      {
-        "name": "s",
-        "phone": "13321078662"
-      },
-      {
-        "name": "s",
-        "phone": "13813212156"
-      },
-      {
-        "name": "s",
-        "phone": "18985647935"
-      }
-    ]
-  }
-]
+"type": "lostandfound",
+"role": "1",
+"time": "2021-6-07",
+"title": "找一下饭卡，在浴室二楼丢的，有没有捡到的同学。",
+"phone": "微信号：dsl214",
+"reward": "10",
+"keyWordList": ["饭卡","浴室二楼"],
+"img": ["http://oss.mengpengkeji.com/image/20210620/fad4e33fa83bf5fe7d85cb24da31f1e7.jpg"],
+"openId": "o287nl94AHt2kM6mdaalUoY",
+"userInfo": {
+    "avatarUrl": "https://img.zcool.cn/community/01b12b6034bc3f11013f3745fef096.jpg@80w_80h_1c_1e_1o_100sh.jpg",
+    "gender": 1,
+    "name": "章鱼Octopoda"
+}
+
+
+
+"type": "love",
+"name": "柿个帅哥",
+"desc": "over",
+"createTime": "2021-06-20 14:05",
+"img": ["http://oss.mengpengkeji.com/image/20210613/e4418042f77ff15be459eedf6b7990b2.jpg","http://oss.mengpengkeji.com/image/20210613/390891be52b98b88b93a949e2ac39cd6.jpg"],
+"disNum": 0,
+"likeNum": 0,
+"openId": "o287nHd6xdTqfgZDcOblc3c"
+
+
+"type": "trade",
+"price": "900",
+"desc": "发个信息大四快毕业了想要出售书桌有意的联系。两个桌子都卖wx:2740745988",
+"isNew": false,
+"img": ["http://oss.mengpengkeji.com/image/20210517/28eb66efc76db994a3acac9bcc116edf.jpg","http://oss.mengpengkeji.com/image/20210517/0561d3c68ee388c273acbc504c30be4a.jpg"],
+"createTime": "2021-05-23 10:22",
+"disNum": 0,
+"likeNum": 0,
+"openId": "o287n5lAt2kGM6ycmlUW2oY",
+"userInfo": {
+    "avatarUrl": "https://img.zcool.cn/community/01bb5560c8761e11013f4720ed28ba.jpg@80w_80h_1c_1e_1o_100sh.jpg",
+    "gender": 0,
+    "grade": "大四",
+    "major": "电子信息工程",
+    "college": "信息科学与工程学院",
+    "name": "DM添"
+}
+
+
+"type": "help",
+"img": ["http://oss.mengpengkeji.com/image/20210619/3a8756cfdcdd67428f85e41e40334ee5.jpg"],
+"desc": "干饭好快乐！",
+"createTime": "2021-06-19 14:05",
+"disNum": 0,
+"likeNum": 0,
+"openId": "o287n5Kl94AHt2kGMycmalUW2oY",
+"userInfo": {
+    "avatarUrl": "https://img.zcool.cn/community/0169bc5f872aad11013e4584ac3c5a.jpg@80w_80h_1c_1e_1o_100sh.jpg",
+    "gender": 1,
+    "name": "白茶柠檬"
+}
