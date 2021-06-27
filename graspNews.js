@@ -52,11 +52,7 @@ async function getNewsDetail(newsHref) {
       method: 'get'
     })
     const $ = cheerio.load(source)
-    // let title
     let detail = []
-    // $('.articleTitle').map((i,m)=>{
-    //   title = $(m).html()
-    // })
     $('.pageArticleContent p').map((i,m)=>{
       detail.push($(m).text())
     })
@@ -67,5 +63,7 @@ async function getNewsDetail(newsHref) {
     await sleep(2000)
   }
 }
-graspNews()
+module.exports = {
+  graspNews
+}
 // getNewsDetail()

@@ -57,7 +57,7 @@ async function getHomeInfo() {
     }
   })
 }
-
+// 编辑公告
 async function editNoticeInfo(req) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -69,4 +69,65 @@ async function editNoticeInfo(req) {
     }
   })
 }
-module.exports = { getNewsList, getAddressInfo, editNoticeInfo, getClubInfo, getHomeInfo, getNewsInfo }
+// 小程序维护
+async function pause(req){
+  return new Promise(async (resolve,reject)=>{
+    try {
+      const { isMaintain } = req.body
+      await DB.update('schoolInfo', { _id: ObjectId('606005390b487148f80cc40f') }, { isMaintain: isMaintain })
+      resolve('success')
+    } catch (error) {
+      
+    }
+  })
+}
+
+// 小程序发布按钮
+async function showIssue(req){
+  return new Promise(async (resolve,reject)=>{
+    try {
+      const { isShowIssue } = req.body
+      await DB.update('schoolInfo', { _id: ObjectId('606005390b487148f80cc40f') }, { isShowIssue: isShowIssue })
+      resolve('success')
+    } catch (error) {
+      
+    }
+  })
+}
+
+// 小程序发布按钮
+async function postMessage(req){
+  return new Promise(async (resolve,reject)=>{
+    try {
+      const { isEmail } = req.body
+      await DB.update('schoolInfo', { _id: ObjectId('606005390b487148f80cc40f') }, { isEmail: isEmail })
+      resolve('success')
+    } catch (error) {
+      
+    }
+  })
+}
+
+// 首页banner图
+async function setBanners(req){
+  return new Promise(async (resolve,reject)=>{
+    try {
+      const { banners } = req.body
+      await DB.update('schoolInfo', { _id: ObjectId('606005390b487148f80cc40f') }, { banners: banners })
+      resolve('success')
+    } catch (error) {
+      
+    }
+  })
+}
+module.exports = { getNewsList, 
+  getAddressInfo, 
+  editNoticeInfo, 
+  getClubInfo, 
+  getHomeInfo, 
+  getNewsInfo,
+  setBanners,
+  showIssue,
+  pause,
+  postMessage
+ }

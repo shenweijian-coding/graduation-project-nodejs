@@ -39,7 +39,7 @@ class Db{
     // console.log(collectionName,json);
     return new Promise((resolve,reject)=>{
       this.connect().then(db=>{
-        const result = db.collection(collectionName).find(json).skip(parseFloat(start)).limit(parseFloat(num))
+        const result = db.collection(collectionName).find(json).sort({_id: -1}).skip(parseFloat(start)).limit(parseFloat(num))
         result.toArray((err,docs)=>{
           if(err){
             reject(err)

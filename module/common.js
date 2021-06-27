@@ -3,8 +3,8 @@ const { request } = require('../tool/request')
 const DB = require('../DB/DB')
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
-const { wxApp } = require('../config/config')
-const { email } = require('../config/config')
+const { wxApp, email163 } = require('../config/config')
+
 // 通过openid获取用户信息
 function getUserInfoByOpenId(openId) {
   return new Promise(async (resolve, reject) => {
@@ -46,9 +46,18 @@ function issueComment(req) {
     }
     // 将trade表的评论数+1 异步即可
     addCommentNum(id, dbName)
+    // 添加到消息通知中
+    // addToMessageInfo()
     // 发布订阅消息
     subscribeMessage({ dbName, id, commentInfo })
     resolve('评论成功')
+  })
+}
+
+// 消息通知
+function addToMessageInfo(){
+  return new Promise(async (resolve, reject)=>{
+
   })
 }
 
@@ -163,10 +172,8 @@ function delIssueInfo(req){
   return new Promise(async(resolve,reject)=>{
     const openId = req.openid
     const { id,dbName } = req.query
-    // console.log(id,dbName);
     const res = await DB.find(dbName,{ '_id':ObjectId(id) })
     if(!res.length) return
-    // console.log(res);
     if(res[0].openId !== openId) {
       resolve('您无权限删除')
       return
@@ -185,6 +192,7 @@ function isLike(req){
     if(!res.length) return
     if(isLike === 'true') { // 增加
       await DB.update(dbName,{'_id':ObjectId(id)},{ likeNum: parseInt(res[0].likeNum) + 1 })
+
       addNewUserInfo(openId,`likeList.${dbName}`,id)
     }else { // 减少
       if(res[0].likeNum == 0) return
@@ -229,18 +237,25 @@ function getCurDataById(dataList){
 
 // 发送邮件的方法
 const transporter = nodemailer.createTransport(smtpTransport({
-  service: email.service,
+  service: email163.service,
+  host: email163.host,
+  secure: true,
+  port: email163.port,
   auth: {
-    user: email.user,//发信人账号
-    pass: email.pass//发信人密码
+    user: email163.user,//发信人账号
+    pass: email163.pass//发信人密码
   },
 }));
 async function sendMail() {
+  const homeInfo = await DB.find('schoolInfo',{_id:ObjectId('606005390b487148f80cc40f')})
+  if(!homeInfo[0].isEmail){
+    return
+  }
   const adminInfo = await DB.find('admin', { _id:ObjectId('609e7f9a7325ad868d79ee1e') })
   const address = adminInfo[0].email
   console.log(address);
   transporter.sendMail({
-    from: '"北院校园通" <2628349880@qq.com>',//发信人config
+    from: '"北院校园通" <clumsy__bird@163.com>',//发信人config
     to: address, //adress 收件人
     cc: '',
     subject: '帖子审核通知',//subject 发送的主题

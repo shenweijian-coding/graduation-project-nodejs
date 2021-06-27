@@ -37,7 +37,7 @@ function postTrade(req) {
       let userInfo = userList[0].info.userInfo
       userInfo = { ...userInfo, ...userList[0].info.schoolInfo }
       await DB.insert('stayBy', { ...tradeInfo, userInfo })
-      sendMail()
+      await sendMail()
       // 插入数据并 获取插入的id
       // const { insertedId } = await DB.insert('stayBy', { ...tradeInfo, userInfo })
       // 将id绑定到userInfo集合

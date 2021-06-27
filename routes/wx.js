@@ -23,7 +23,7 @@ router.get('/login',async (req,res)=>{
   }
   if(!userInfo.length) {
     // 获取openid 作为识别用户的唯一标识符 存入数据库
-    await DB.insert('userInfo', { openId: wxRes.openid,likeList })
+    await DB.insert('userInfo', { openId: wxRes.openid, likeList })
   }
   // 换取openId 返回小程序  绑定个人信息用
   res.send(new SuccessModel(wxRes))
